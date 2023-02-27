@@ -2,13 +2,13 @@ import { LitElement, html, css } from "lit";
 
 class DateField extends LitElement {
   static styles = css`
+    :host([intValue]) {
+      color: var(--secondary);
+    }
     :host([error]) {
       color: var(--error);
     }
 
-    :host([value]) {
-      color: var(--secondary);
-    }
     :host-context([submitted]) {
       color: inherit;
     }
@@ -76,10 +76,15 @@ class DateField extends LitElement {
     this.value = ev.target.textContent.trim();
     // console.log("\"" + this.value + "\"");
     const parsedValue = parseInt(this.value);
-    // this.intValue = !isNaN(parsedValue) && parsedValue.toString() === this.value
-    //   ? parsedValue
-    //   : undefined;
-    this.intValue = parsedValue;
+    this.intValue = this.value !== ""
+      ? parsedValue
+      : undefined;
+    // this.intValue = parsedValue;
+    // console.log(this.intValue);
+    this.dispatchEvent(new CustomEvent("changeValue", {
+      bubbles: true,
+      detail: this.intValue
+    }));
   }
 
   /* Avoid whitespaces */

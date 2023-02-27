@@ -37,6 +37,9 @@ class AppWrapper extends LitElement {
       .primary {
         color: var(--primary);
       }
+      weekday-form {
+        margin-bottom: 1.5rem;
+      }
     `,
     resultCopy
   ];

@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { Calendar } from "../CalendarMethods";
 
 const buttonStyles = css`
   button {
@@ -70,7 +71,7 @@ class WeekdayForm extends LitElement {
         align-items: baseline;
       }
 
-      .date-wrapper[submitted] {
+      :host([submitted]) .date-wrapper {
         color: var(--primary);
       }
 
@@ -85,14 +86,81 @@ class WeekdayForm extends LitElement {
   ];
 
   static properties = {
+    date: {
+      state: true,
+      // attribute: true,
+      // reflect: true,
+      type: Number
+    },
+    month: {
+      state: true,
+      // attribute: true,
+      // reflect: true,
+      type: Number
+    },
+    year: {
+      state: true,
+      // attribute: true,
+      // reflect: true,
+      type: Number
+    },
+    isButtonDisabled: {
+      state: true,
+      type: Boolean
+    },
+    submitted: {
+      attribute: true,
+      reflect: true,
+      type: Boolean
+    }
     // fieldsList: {
     //   state: true
     // }
   };
 
+  constructor() {
+    super();
+    this.isButtonDisabled = true;
+    this.submitted = false;
+  }
+
+  /**
+   * @param {Set} changedProps
+   */
+  update(changedProps) {
+    // console.log(changedProps);
+    if (
+      changedProps.has("year") ||
+      changedProps.has("month") ||
+      changedProps.has("date")
+    ) {
+      this.submitted = false;
+      this.setIsDisabled();
+    }
+    super.update();
+  }
+
   handleSubmit(ev) {
     ev.preventDefault();
     const { date, month, year } = this;
+    if (year === 0) {
+      this.getField("year").setAttribute("error", "");
+      this.isButtonDisabled = true;
+      return;
+    }
+    if (month > 12 || month === 0) {
+      this.getField("month").setAttribute("error", "");
+      this.isButtonDisabled = true;
+      return;
+    }
+    if (date > Calendar.getMonthDay(month - 1, year) || date === 0) {
+      this.getField("date").setAttribute("error", "");
+      this.isButtonDisabled = true;
+      return;
+    }
+    /* Valid submit */
+    this.submitted = true;
+    this.isButtonDisabled = true;
     this.dispatchEvent(new CustomEvent("dateSubmit", {
       bubbles: true,
       detail: {
@@ -103,36 +171,58 @@ class WeekdayForm extends LitElement {
     }));
   }
 
-  /**
-   * @param {"date" | "month" | "year"} field
-   */
-  getFieldValue(field) {
-    return this.renderRoot.querySelector(`date-field[field=${field}]`).intValue;
+  getField(field) {
+    return this.renderRoot.querySelector(`date-field[field=${field}]`);
   }
 
-  get date() { return this.getFieldValue("date"); }
-  get month() { return this.getFieldValue("month"); }
-  get year() { return this.getFieldValue("year"); }
+  setField = field => ev => {
+    this[field] = ev.detail;
+    this.getField(field).removeAttribute("error");
+    this.getField("date").removeAttribute("error");
+  };
+
+  setIsDisabled() {
+    // const dateState = this.date;
+    const { date, month, year } = this;
+    console.table({ date, month, year });
+    if (this.renderRoot.querySelectorAll("[error]").length !== 0) {
+      this.isButtonDisabled = true;
+      return;
+    }
+    this.isButtonDisabled = [date, month, year]
+      .some(el => el === undefined || el === null);
+  }
 
   render() {
     const spacer = html`<span class="spacer">/</span>`;
-
+    // const { date, month, year } = this;
     return html`
       <form @submit=${this.handleSubmit}>
         <div class="date-wrapper">
-          <date-field field="date">
+          <date-field
+            field="date"
+            @changeValue=${this.setField("date")}
+            >
             <p slot="type">Día</p>
           </date-field>
           ${spacer}
-          <date-field field="month">
+          <date-field
+            field="month"
+            @changeValue=${this.setField("month")}
+          >
             <p slot="type">Mes</p>
           </date-field>
           ${spacer}
-          <date-field field="year">
+          <date-field
+            field="year"
+            @changeValue=${this.setField("year")}
+            >
             <p slot="type">Año</p>
           </date-field>
         </div>
-        <button>
+        <button
+          ?disabled=${this.isButtonDisabled}
+        >
           <span>Calcular</span>
           <div class="bg"></div>
         </button>
