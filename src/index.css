@@ -3,11 +3,14 @@
   --active-bg: #111B40;
   --text: #EEFCFF;
   --primary: #0BCD08;
-  --dark-primary: hsl(119deg 80% 30%);
+  --dark-primary: hsl(119deg 80% 26%);
+  --translucid-primary: hsl(119deg 92% 42% / 50%);
   --secondary: #0EAAED;
+  --dark-secondary: hsl(216deg 69% 40%);
   --error: #F12D06;
   --disabled-bg: #AFAFAF;
   --disabled-txt: #E1E6E7;
+  --calendar-holiday: #E03400;
 }
 
 body {
