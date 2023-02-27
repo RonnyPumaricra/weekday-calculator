@@ -48,19 +48,24 @@ class CalendarComponent extends LitElement {
   update() {
     const { date, month, year } = this;
     if ([date, month, year].every(data => data !== undefined)) {
-      console.table({ date, month, year });
+      // console.table({ date, month, year });
       const weekday = Calendar.getWeekday({ date, month, year });
       // this.firstDayCode = module(weekday - date, month);
-      this.firstDayCode = module(weekday - date + 1, month);
+      this.firstDayCode = module(weekday - date + 1, 7);
+      console.log("FirstDayCode: ", this.firstDayCode);
     }
     super.update();
   }
 
+  getDays(monthIndex) {
+    return Calendar.getMonthDay(monthIndex, this.year);
+  }
+
   renderPrevMonth() {
-    console.log(this.month);
+    // console.log(this.month);
     return range(this.firstDayCode)
       .map((i) => {
-        return Calendar.monthsDays[module(this.month - 2, 12)] - i;
+        return this.getDays(module(this.month - 2, 12)) - i;
       })
       .map(date => html`
         <calendar-date
@@ -71,7 +76,7 @@ class CalendarComponent extends LitElement {
   }
 
   renderCurrentMonth() {
-    return range(Calendar.monthsDays[this.month - 1])
+    return range(this.getDays(this.month - 1))
       .map(date => html`
         <calendar-date
           ?currentMonth=${true}
@@ -83,8 +88,8 @@ class CalendarComponent extends LitElement {
 
   /* Halla el N° de días necesarios para completar el calendario */
   renderNextMonth() {
-    console.log(-(Calendar.monthsDays[this.month - 1] + this.firstDayCode));
-    return range(module(-(Calendar.monthsDays[this.month - 1] + this.firstDayCode), 7))
+    // console.log(-(this.getDays(this.month - 1] + this.firstDayCode));
+    return range(module(-(this.getDays(this.month - 1) + this.firstDayCode), 7))
       .map(date => html`
         <calendar-date
           .date=${date + 1}

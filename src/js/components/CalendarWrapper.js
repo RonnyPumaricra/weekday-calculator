@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { Calendar } from "../CalendarMethods";
 
 class CalendarWrapper extends LitElement {
   static styles = css`
@@ -56,12 +57,15 @@ class CalendarWrapper extends LitElement {
 
   render() {
     const { date, month, year } = this.inputData;
+    const monthName = Calendar.monthsList[month - 1].toUpperCase();
+    const weekdayName = Calendar.weekdaysList[Calendar.getWeekday({ date, month, year })]
+      .toUpperCase();
     return html`
       <div class="info">
-        <div class="date">10</div>
-        <div class="month">JULIO</div>
-        <div class="year">2005</div>
-        <div class="day">DOMINGO</div>
+        <div class="date">${date}</div>
+        <div class="month">${monthName}</div>
+        <div class="year">${year}</div>
+        <div class="day">${weekdayName}</div>
       </div>
       <div class="calendar-wrapper">
         <calendar-component

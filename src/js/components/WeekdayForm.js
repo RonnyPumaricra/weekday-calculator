@@ -92,15 +92,27 @@ class WeekdayForm extends LitElement {
 
   handleSubmit(ev) {
     ev.preventDefault();
+    const { date, month, year } = this;
     this.dispatchEvent(new CustomEvent("dateSubmit", {
       bubbles: true,
       detail: {
-        date: 11,
-        month: 9,
-        year: 2001
+        date,
+        month,
+        year
       }
     }));
   }
+
+  /**
+   * @param {"date" | "month" | "year"} field
+   */
+  getFieldValue(field) {
+    return this.renderRoot.querySelector(`date-field[field=${field}]`).intValue;
+  }
+
+  get date() { return this.getFieldValue("date"); }
+  get month() { return this.getFieldValue("month"); }
+  get year() { return this.getFieldValue("year"); }
 
   render() {
     const spacer = html`<span class="spacer">/</span>`;
@@ -108,15 +120,15 @@ class WeekdayForm extends LitElement {
     return html`
       <form @submit=${this.handleSubmit}>
         <div class="date-wrapper">
-          <date-field>
+          <date-field field="date">
             <p slot="type">Día</p>
           </date-field>
           ${spacer}
-          <date-field>
+          <date-field field="month">
             <p slot="type">Mes</p>
           </date-field>
           ${spacer}
-          <date-field class="year">
+          <date-field field="year">
             <p slot="type">Año</p>
           </date-field>
         </div>

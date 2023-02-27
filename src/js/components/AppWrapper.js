@@ -27,7 +27,7 @@ class AppWrapper extends LitElement {
         margin: auto;
         padding: 0 64px;
         width: 100%;
-        max-width: 1200px;
+        max-width: 900px;
 
         text-align: center;
 

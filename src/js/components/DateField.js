@@ -34,7 +34,7 @@ class DateField extends LitElement {
       // overflow: hidden;
       // text-overflow: ellipsis;
     }
-    :host(.year) .input {
+    :host([field="year"]) .input {
       min-width: 4.5ch;
     }
 
@@ -59,13 +59,47 @@ class DateField extends LitElement {
   `;
 
   static properties = {
-
+    value: {
+      state: true
+    },
+    intValue: {
+      attribute: true,
+      reflect: true,
+      type: Number
+    }
+    // fieldState: {
+    //   attribute: true
+    // }
   };
+
+  handleInput(ev) {
+    this.value = ev.target.textContent.trim();
+    // console.log("\"" + this.value + "\"");
+    const parsedValue = parseInt(this.value);
+    // this.intValue = !isNaN(parsedValue) && parsedValue.toString() === this.value
+    //   ? parsedValue
+    //   : undefined;
+    this.intValue = parsedValue;
+  }
+
+  /* Avoid whitespaces */
+  handleKey(ev) {
+    // if ([32, 13].some(code => code === ev.charCode)) ev.preventDefault();
+    const { charCode } = ev;
+    if (!(charCode >= 48 && charCode <= 57)) ev.preventDefault();
+    // console.log(ev.charCode);
+  }
 
   render() {
     return html`
       <div class="input-wrapper">
-        <div class="input" contenteditable="true"></div>
+        <div
+          class="input"
+          contenteditable="true"
+          @input=${this.handleInput}
+          @keypress=${this.handleKey}
+          .textContent=${this.value}
+        ></div>
         <div class="input-bottom"></div>
       </div>
       <slot name="type"></slot>

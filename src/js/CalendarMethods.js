@@ -54,6 +54,12 @@ export class Calendar {
     4,
   ];
 
+  static getMonthDay(monthIndex, year) {
+    /* Leap month */
+    if (Calendar.isLeapYear(year) && monthIndex === 1) return 29;
+    return Calendar.monthsDays[monthIndex];
+  }
+
   static isLeapYear(year) {
     return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
   }
