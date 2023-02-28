@@ -28,10 +28,14 @@ class AppWrapper extends LitElement {
         padding: 0 64px;
         width: 100%;
         max-width: 900px;
-
         text-align: center;
 
         // background: hsl(200deg 100% 50% / 40%) content-box;
+      }
+      @media (max-width: 800px) {
+        :host {
+          padding: 0 16px;
+        }
       }
 
       .primary {

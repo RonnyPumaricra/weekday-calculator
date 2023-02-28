@@ -4,12 +4,20 @@ import { Calendar } from "../CalendarMethods";
 class CalendarWrapper extends LitElement {
   static styles = css`
     :host {
-      align-self: center;
+      // align-self: l;
 
       display: flex;
+      flex-wrap: wrap;
       width: 100%;
-      height: 400px;
+      min-width: min-content;
+      // height: 400px;
       background: var(--active-bg);
+    }
+
+    @media (max-width:800px) {
+      .info {
+        font-size: .8rem;
+      }
     }
 
     .info {
@@ -17,7 +25,8 @@ class CalendarWrapper extends LitElement {
       flex-direction: column;
       justify-content: center;
       background: var(--dark-secondary);
-      width: 300px;
+      flex: 1;
+      padding: 1rem;
     }
     .info div {
       line-height: calc(1em + 0.5rem);
@@ -26,13 +35,13 @@ class CalendarWrapper extends LitElement {
       font-weight: 300;
     }
     .info .date {
-      font-size: 4rem;
+      font-size: 4em;
     }
     .info .month {
-      font-size: 3rem;
+      font-size: 3em;
     }
     .info .year {
-      font-size: 2.5rem;
+      font-size: 2.5em;
     }
     .info .day {
       color: var(--primary);

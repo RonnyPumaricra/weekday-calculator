@@ -12,6 +12,16 @@ class CalendarDate extends LitElement {
 
       position: relative;
     }
+    @media (max-width:800px) {
+      :host {
+        font-size: 1rem;
+      }
+    }
+    @media (max-width:400px) {
+      :host {
+        font-size: .9rem;
+      }
+    }
     div {
       isolation: isolate;
     }

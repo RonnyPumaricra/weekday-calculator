@@ -5,18 +5,24 @@ import { module, range } from "../helpers";
 class CalendarComponent extends LitElement {
   static styles = css`
     :host {
+      --date-size: 2.6rem;
       display: grid;
-      grid-template-columns: repeat(7, 2.6rem);
+      grid-template-columns: repeat(7, var(--date-size));
       gap: 1rem;
+      padding: 1.5rem;
     }
-    div {
-      // width: 3rem;
-      // height: 3rem;
-      aspect-ratio: 1;
-      font-size: 1.2rem;
-      background: var(--secondary);
-      display: grid;
-      place-items: center;
+    @media (max-width:800px) {
+      :host {
+        gap: .6rem;
+        --date-size: 2.3rem;
+      }
+    }
+    @media (max-width:400px) {
+      :host {
+        --date-size: 2rem;
+        padding-left: .5rem;
+        padding-right: .5rem;
+      }
     }
   `;
 
